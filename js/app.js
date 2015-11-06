@@ -6,6 +6,11 @@ angular.module('myApp', [])
 
 	var pendingTask;
 
+	if($scope.search === undefined){
+		$scope.search = "";
+		fetch();
+	}
+
 	$scope.change = function(){
 		if(pendingTask){
 			clearTimeout(pendingTask);
@@ -14,7 +19,11 @@ angular.module('myApp', [])
 	};
 
 	function fetch() {
-		$http.get("https://api.discogs.com/database/search?q=" + $scope.search + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){ $scope.details = response.results; console.log(response.results) });
+		$http.get("https://api.discogs.com/database/search?q=" + $scope.search + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){
+		var output = response.results;
+		$scope.details = output;
+		var related = output.slice(1, (output.length - 1));
+		$scope.results = related; console.log(related); });
 		/* do something for related results, eventually use Grunt to store secret & key */
 	}
 
