@@ -4,11 +4,6 @@
 angular.module('myApp', [])
 	.controller('SearchController', function($scope, $http){
 
-	if($scope.search === undefined) {
-		$scope.search = "";
-		fetch();
-	}
-
 	var pendingTask;
 
 	$scope.change = function(){
@@ -16,15 +11,15 @@ angular.module('myApp', [])
 			clearTimeout(pendingTask);
 		}
 		pendingTask = setTimeout(fetch, 800);
-	}
+	};
 
 	function fetch() {
-		$http.get("https://api.discogs.com/database/search?q=" + $scope.search + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){$scope.details = response; console.log(response)});
+		$http.get("https://api.discogs.com/database/search?q=" + $scope.search + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){ $scope.details = response.results; console.log(response.results) });
 		/* do something for related results, eventually use Grunt to store secret & key */
 	}
 
 	$scope.update = function(result) {
-		$scope.search = result.Title;
+		$scope.search = result.title;
 		$scope.change();
 	};
 
