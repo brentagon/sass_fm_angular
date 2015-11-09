@@ -1,0 +1,1 @@
+If you're injecting dependencies, you have to inject all the ones that you're using in the main controller function.

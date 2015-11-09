@@ -30,10 +30,10 @@
     </script>
     <script type="text/ng-template" id="/albums.html">
       <h1>
-      {{album.img}}
-      {{album.title}}
+      {{ album.img }}
+      {{ album.title }}
       </h1>
-      <div ng-repeat="review in post.reviews | orderBy: '-upvotes'">
+      <div ng-repeat="review in album.reviews | orderBy: '-upvotes'">
       {{review.upvotes}} - by {{review.author}}
       <br>
       {{review.body}}

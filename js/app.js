@@ -10,27 +10,35 @@ angular.module('myApp', ['ui.router'])
 					url: '/home',
 					templateUrl: '/home.html',
 					controller: 'SearchController'
-				});
+				})
 				.state('albums', {
 					url: '/albums/{id}',
 					templateUrl: '/albums.html',
 					controller: 'AlbumsController'
 				});
 			$urlRouterProvider.otherwise('home');
-		}]);
+		}])
 
 	.factory('albums', [function(){
 		var a = {
 			albums: []
 		};
 		return a;
-	}]);
+	}])
 
 	.controller('AlbumsController', [
 		'$scope',
 		'$stateParams',
 		'albums',
 		function($scope, $stateParams, albums) {
+			console.log('foo');
+			$scope.albums = albums.albums;
+			if (albums.albums[id]) {
+			$scope.album = albums.albums[id];
+		} else {
+			$http.get("https://api.discogs.com/database/search?q=" + $stateParams.id + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){			$scope.album = response.results
+			});
+		}
 			$scope.addReview = function() {
 				if($scope.body === '') { return; }
 				$scope.album.reviews.push({
@@ -40,17 +48,17 @@ angular.module('myApp', ['ui.router'])
 				});
 				$scope.body = '';
 			}
-		}]);
+		}])
 
 	.controller('SearchController', [
 	'$scope',
+	'$http',
 	'albums',
-	'reviews'
-	function($scope, albums, $http){
+	function($scope, $http, albums){
 
 	var pendingTask;
-	$scope.albums = albums.albums[$stateParams.id];
-	$scope.reviews = reviews.reviews;
+
+	$scope.albums = albums.albums;
 
 	if($scope.search === undefined){
 		$scope.search = "";
@@ -60,12 +68,12 @@ angular.module('myApp', ['ui.router'])
 		$scope.albums.push({
 			title: $scope.details[0].title,
 			img: $scope.details[0].thumb,
+			id: $scope.details[0].id,
 			reviews: [
 				{author: 'Bront', body: 'Whatever', upvotes: 0},
 				{author: 'Brandt', body: 'I love it', upvotes: 0}
 			]
 		});
-		console.log($scope.albums);
 	};
 
 	$scope.change = function(){
@@ -80,7 +88,9 @@ angular.module('myApp', ['ui.router'])
 		var output = response.results;
 		$scope.details = output;
 		var related = output.slice(1, (output.length - 1));
-		$scope.results = related; });
+		$scope.results = related; 	console.log(related[0]);
+		});
+
 		/* do something for related results, eventually use Grunt to store secret & key */
 	}
 
