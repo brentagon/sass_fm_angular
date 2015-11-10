@@ -11,11 +11,11 @@ angular.module('myApp', ['ui.router'])
 					templateUrl: '/home.html',
 					controller: 'SearchController'
 				})
-				.state('albums', {
-					url: '/albums/{id}',
-					templateUrl: '/albums.html',
-					controller: 'AlbumsController'
-				});
+				.state('object', {
+					url: '/{type}/{id}',
+					templateUrl: '/objects.html',
+					controller: 'ObjectsController'
+				})
 			$urlRouterProvider.otherwise('home');
 		}])
 
@@ -26,17 +26,18 @@ angular.module('myApp', ['ui.router'])
 		return a;
 	}])
 
-	.controller('AlbumsController', [
+	.controller('ObjectsController', [
 		'$scope',
 		'$stateParams',
 		'albums',
-		function($scope, $stateParams, albums) {
-			console.log('foo');
-			$scope.albums = albums.albums;
-			if (albums.albums[id]) {
-			$scope.album = albums.albums[id];
+		'$http',
+		function($scope, $stateParams, albums, $http) {
+			if (albums.albums[$stateParams.id]) {
+			$scope.object = albums.albums[$stateParams.id];
 		} else {
-			$http.get("https://api.discogs.com/database/search?q=" + $stateParams.id + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){			$scope.album = response.results
+			$http.get("https://api.discogs.com/"+ $stateParams.type + "/" + $stateParams.id).success(function(response){
+			console.log(response.images[0]);
+			$scope.object = response;
 			});
 		}
 			$scope.addReview = function() {
@@ -87,8 +88,9 @@ angular.module('myApp', ['ui.router'])
 		$http.get("https://api.discogs.com/database/search?q=" + $scope.search + "&key=sgPQPSrsXwtszVQohmLS&secret=AkCvXlTSVACjBxuLHSKQteoeuFQFvZVY").success(function(response){
 		var output = response.results;
 		$scope.details = output;
+		$scope.dataType = output[0].type;
 		var related = output.slice(1, (output.length - 1));
-		$scope.results = related; 	console.log(related[0]);
+		$scope.results = related;
 		});
 
 		/* do something for related results, eventually use Grunt to store secret & key */

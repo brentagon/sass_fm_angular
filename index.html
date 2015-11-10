@@ -28,10 +28,10 @@
         </div>
       </div>
     </script>
-    <script type="text/ng-template" id="/albums.html">
+    <script type="text/ng-template" id="/objects.html">
       <h1>
-      {{ album.img }}
-      {{ album.title }}
+      <img ng-src="{{ object.images[0] }}">
+      {{ object.title }}
       </h1>
       <div ng-repeat="review in album.reviews | orderBy: '-upvotes'">
       {{review.upvotes}} - by {{review.author}}

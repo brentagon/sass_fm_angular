@@ -2,7 +2,7 @@
 	<div ng-if="results">
 		Related Results:
 		<li ng-repeat = "result in results">
-			{{ result.title }}
+		<a href="/#/{{ result.type }}s/{{ result.id }}">	{{ result.title }} </a>
 		</li>
 	</div>
 </div>
