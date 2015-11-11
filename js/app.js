@@ -11,6 +11,7 @@ angular.module('myApp', ['ui.router'])
 					templateUrl: '/home.html',
 					controller: 'SearchController'
 				})
+			/* dynamically created state depending on type of object selected (artist, album, label, etc.) */
 				.state('object', {
 					url: '/{type}/{id}',
 					templateUrl: '/objects.html',
@@ -20,6 +21,7 @@ angular.module('myApp', ['ui.router'])
 		}])
 
 	.factory('objects', [function(){
+		/* store of favorite objects */
 		var a = {
 			objects: []
 		};
@@ -33,10 +35,12 @@ angular.module('myApp', ['ui.router'])
 		'$http',
 		'$filter',
 		function($scope, $stateParams, objects, $http, $filter) {
+			/* check if object has been interacted with by users */
 			var objectStored = $filter('filter')(objects.objects, {id: $stateParams.id, type: $stateParams.type});
 			if( objectStored[0] != null ) {
 			$scope.object = objectStored[0];
 		} else {
+			/* if not, render page using API info */
 			$http.get("https://api.discogs.com/"+ $stateParams.type + "/" + $stateParams.id).success(function(response){
 			$scope.object = response;
 			});
@@ -62,10 +66,7 @@ angular.module('myApp', ['ui.router'])
 
 	$scope.objects = objects.objects;
 
-	if($scope.search === undefined){
-		$scope.search = "";
-		fetch();
-	}
+
 	$scope.addObject = function() {
 		$scope.objects.push({
 			title: $scope.details[0].title,
@@ -95,7 +96,7 @@ angular.module('myApp', ['ui.router'])
 		$scope.results = related;
 		});
 
-		/* do something for related results, eventually use Grunt to store secret & key */
+		/* eventually use Grunt to store secret & key */
 	}
 
 	$scope.update = function(result) {
