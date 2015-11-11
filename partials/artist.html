@@ -1,5 +1,11 @@
 <h2>{{ object.name }}</h2>
 <div ng-if="object.members">
 	<h3> Members: </h3>
-	<li ng-repeat="member in object.members"><a href="/#/artists/{{ member.id }}"> {{ member.name }}</li>
+	<li ng-repeat="member in object.members"><a href="/#/artists/{{ member.id }}"> {{ member.name }} </a> </li>
+</div>
+
+<div ng-if="object.profile">
+	<p>
+		{{ object.profile }}
+	</p>
 </div>
