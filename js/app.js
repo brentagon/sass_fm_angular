@@ -19,9 +19,9 @@ angular.module('myApp', ['ui.router'])
 			$urlRouterProvider.otherwise('home');
 		}])
 
-	.factory('albums', [function(){
+	.factory('objects', [function(){
 		var a = {
-			albums: []
+			objects: []
 		};
 		return a;
 	}])
@@ -29,20 +29,21 @@ angular.module('myApp', ['ui.router'])
 	.controller('ObjectsController', [
 		'$scope',
 		'$stateParams',
-		'albums',
+		'objects',
 		'$http',
-		function($scope, $stateParams, albums, $http) {
-			if (albums.albums[$stateParams.id]) {
-			$scope.object = albums.albums[$stateParams.id];
+		'$filter',
+		function($scope, $stateParams, objects, $http, $filter) {
+			var objectStored = $filter('filter')(objects.objects, {id: $stateParams.id, type: $stateParams.type});
+			if( objectStored[0] != null ) {
+			$scope.object = objectStored[0];
 		} else {
 			$http.get("https://api.discogs.com/"+ $stateParams.type + "/" + $stateParams.id).success(function(response){
-			console.log(response.images[0]);
 			$scope.object = response;
 			});
 		}
 			$scope.addReview = function() {
 				if($scope.body === '') { return; }
-				$scope.album.reviews.push({
+				$scope.object.reviews.push({
 					body: $scope.body,
 					author: 'user',
 					upvotes: 0
@@ -54,22 +55,23 @@ angular.module('myApp', ['ui.router'])
 	.controller('SearchController', [
 	'$scope',
 	'$http',
-	'albums',
-	function($scope, $http, albums){
+	'objects',
+	function($scope, $http, objects){
 
 	var pendingTask;
 
-	$scope.albums = albums.albums;
+	$scope.objects = objects.objects;
 
 	if($scope.search === undefined){
 		$scope.search = "";
 		fetch();
 	}
-	$scope.addAlbum = function() {
-		$scope.albums.push({
+	$scope.addObject = function() {
+		$scope.objects.push({
 			title: $scope.details[0].title,
 			img: $scope.details[0].thumb,
 			id: $scope.details[0].id,
+			type: $scope.details[0].type + "s",
 			reviews: [
 				{author: 'Bront', body: 'Whatever', upvotes: 0},
 				{author: 'Brandt', body: 'I love it', upvotes: 0}
