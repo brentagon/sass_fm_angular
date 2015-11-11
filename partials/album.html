@@ -1,0 +1,15 @@
+<img ng-src="{{ object.images[0] }}">
+	{{ object.title }}
+	</h1>
+	<div ng-repeat="review in object.reviews | orderBy: '-upvotes'">
+	{{review.upvotes}} - by {{review.author}}
+	<br>
+	{{review.body}}
+	</div>
+	<form ng-submit="addReview()"  style="margin-top:30px;">
+		<h3>Add a new review</h3>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Review"  ng-model="body"></input>
+		</div>
+		<button type="submit" class="btn btn-primary">Post</button>
+	</form>

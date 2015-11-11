@@ -1,0 +1,17 @@
+<h2>{{ object.name }}</h2>
+
+<div ng-if="object.parent_label">
+	Parent label: <a href="/#/labels/{{ object.parent_label.id }}">  {{ object.parent_label.name }}</a>
+</div>
+
+<div ng-if="object.profile">
+	<p>
+		{{ object.profile }}
+	</p>
+</div>
+
+<div ng-if="object.sublabels">
+	Sublabels:
+	<li ng-repeat="sublabel in object.sublabels"> <a href="/#/labels/{{ sublabel.id }}"></a>{{ sublabel.name }} </li>
+
+</div>
